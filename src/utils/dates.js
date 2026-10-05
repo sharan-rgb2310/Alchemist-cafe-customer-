@@ -1,0 +1,13 @@
+export const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const sod=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x};
+export const today=()=>sod(new Date());
+export const iso=d=>{const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`};
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+export const daysUntil=s=>{if(!s)return null;const t=today(),p=parse(s);let n=new Date(t.getFullYear(),p.getMonth(),p.getDate());if(n<t)n=new Date(t.getFullYear()+1,p.getMonth(),p.getDate());return Math.round((n-t)/864e5)};
+export const fmtFull=s=>s?parse(s).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';
+export const fmtShort=s=>s?parse(s).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}).toUpperCase():'—';
+export const monthOf=s=>s?parse(s).getMonth():-1;
+export const yearOf=s=>parse(s).getFullYear();
+export const rel=n=>n===0?'Today':n===1?'Tomorrow':`In ${n} days`;
+export const initials=n=>n.split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+export const years=s=>{const t=new Date();t.setDate(t.getDate()+daysUntil(s));return t.getFullYear()-yearOf(s)};
