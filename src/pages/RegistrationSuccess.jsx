@@ -26,7 +26,7 @@ export default function RegistrationSuccess() {
 				</svg>
 			</motion.div>
 			<motion.h1 id="success-title" className="success-title" {...reveal(0.82)}>Registration Successful!</motion.h1>
-			<motion.p className="success-description" {...reveal(1.02)}>Your details have been registered. We look forward to welcoming you to Alchemist.</motion.p>
+			<motion.p className="success-description" {...reveal(1.02)}>Welcome to our cafe community. Stay tuned for new menus, special offers &amp; exclusive gift vouchers.<br /><br />We can’t wait to serve you! ❤️</motion.p>
 			<motion.div className="success-action" {...reveal(1.2)}>
 				<Link to="/" className="success-home-link">BACK TO HOME <span aria-hidden="true">→</span></Link>
 			</motion.div>

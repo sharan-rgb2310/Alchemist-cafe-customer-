@@ -248,6 +248,13 @@ html.compact {
     padding-left: 36px
 }
 
+.registration-date-note {
+    margin: -8px 0 0;
+    color: #82766c;
+    font-size: 12px;
+    line-height: 1.5
+}
+
 .register-error {
     display: block;
     margin-top: 5px;

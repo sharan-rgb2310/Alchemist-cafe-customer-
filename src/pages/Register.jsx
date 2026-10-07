@@ -74,6 +74,7 @@ export default function Register() {
 					<Field icon={CalendarDays} label="Date of birth" error={errors.birthday?.message}><input className="registration-input" type="date" aria-invalid={!!errors.birthday} {...register('birthday')} /></Field>
 					<Field icon={CalendarDays} label="Anniversary"><input className="registration-input" type="date" {...register('anniversary')} /></Field>
 				</div>
+				<p className="registration-date-note">Share your date of birth and anniversary to avail discounts and gift vouchers.</p>
 				<Field icon={Mail} label="Email address" error={errors.email?.message}><input className="registration-input" type="email" autoComplete="email" placeholder="name@example.com" aria-invalid={!!errors.email} {...register('email')} /></Field>
 			</div>
 			{submitError && <p role="alert" className="register-error">{submitError}</p>}
