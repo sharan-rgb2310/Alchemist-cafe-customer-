@@ -1,6 +1,6 @@
 import React,{useEffect} from 'react';import {useForm} from 'react-hook-form';import {zodResolver} from '@hookform/resolvers/zod';import {z} from 'zod';import {Modal,Field,Avatar} from '../ui';import {Camera,Trash2} from 'lucide-react';import {useApp} from '../../context/AppContext';
 const date=z.string().refine(v=>!v||(!isNaN(Date.parse(v))&&new Date(v)<=new Date()),'Enter a valid date (not in the future)');
-const schema=z.object({name:z.string().trim().min(2,'Full name is required'),phone:z.string().regex(/^\+?[0-9 ()-]{8,16}$/,'Enter a valid phone number'),email:z.string().trim().email('Enter a valid email'),birthday:z.string().min(1,'Date of birth is required').and(date),anniversary:date,notes:z.string().max(500),status:z.enum(['Active','New','Pending']),photo:z.string().optional()});
+const schema=z.object({name:z.string().trim().min(1,'Please enter your name'),phone:z.string().trim().refine(v=>!v||/^\+?[0-9 ()-]{8,16}$/.test(v),'Enter a valid phone number'),email:z.string().trim().refine(v=>!v||z.string().email().safeParse(v).success,'Enter a valid email'),birthday:date,anniversary:date,notes:z.string().max(500),status:z.enum(['Active','New','Pending']),photo:z.string().optional()});
 const empty={name:'',phone:'+91 ',email:'',birthday:'',anniversary:'',notes:'',status:'New',photo:''};
 export default function CustomerForm({open,onClose,customer,onSaved}){const {addCustomer,editCustomer,toast}=useApp();
  const {register,handleSubmit,reset,watch,setValue,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(schema),defaultValues:empty});
@@ -9,11 +9,11 @@ export default function CustomerForm({open,onClose,customer,onSaved}){const {add
  const pick=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return toast('Please choose an image file','error');const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const z=240,k=Math.max(z/im.width,z/im.height),cv=document.createElement('canvas');cv.width=cv.height=z;cv.getContext('2d').drawImage(im,(z-im.width*k)/2,(z-im.height*k)/2,im.width*k,im.height*k);setValue('photo',cv.toDataURL('image/jpeg',.82))};im.src=r.result};r.readAsDataURL(f);e.target.value=''};
  const submit=async d=>{try{if(customer){await editCustomer(customer.id,d);onSaved?.()}else{const c=await addCustomer(d);onSaved?.(c)}onClose()}catch{}};
  return <Modal open={open} onClose={onClose} title={customer?'Edit Customer':'Add Customer'}><form onSubmit={handleSubmit(submit)} noValidate className="grid sm:grid-cols-2 gap-4"><div className="sm:col-span-2 flex items-center gap-4"><Avatar name={nm||'New Customer'} photo={photo} size={72}/><div className="flex flex-wrap gap-2"><label className="btn-ghost cursor-pointer"><Camera size={15}/>{photo?'Change photo':'Upload photo'}<input type="file" accept="image/*" className="sr-only" onChange={pick}/></label>{photo&&<button type="button" className="btn-ghost" onClick={()=>setValue('photo','')}><Trash2 size={15}/>Remove</button>}</div></div>
- <Field label="Full Name *" error={errors.name?.message}><input className="inp" {...register('name')}/></Field>
- <Field label="Phone *" error={errors.phone?.message}><input className="inp" {...register('phone')}/></Field>
- <Field label="Email *" error={errors.email?.message}><input type="email" className="inp" {...register('email')}/></Field>
- <Field label="Date of Birth *" error={errors.birthday?.message}><input type="date" className="inp" {...register('birthday')}/></Field>
- <Field label="Anniversary" error={errors.anniversary?.message}><input type="date" className="inp" {...register('anniversary')}/></Field>
+ <Field label="Full Name *" error={errors.name?.message}><input className="inp" required {...register('name')}/></Field>
+ <Field label="Phone (Optional)" error={errors.phone?.message}><input className="inp" {...register('phone')}/></Field>
+ <Field label="Email (Optional)" error={errors.email?.message}><input type="email" className="inp" {...register('email')}/></Field>
+ <Field label="Date of Birth (Optional)" error={errors.birthday?.message}><input type="date" className="inp" {...register('birthday')}/></Field>
+ <Field label="Anniversary (Optional)" error={errors.anniversary?.message}><input type="date" className="inp" {...register('anniversary')}/></Field>
  <Field label="Status"><select className="inp" {...register('status')}><option>Active</option><option>New</option><option>Pending</option></select></Field>
  <div className="sm:col-span-2"><Field label="Notes" error={errors.notes?.message}><textarea rows={3} className="inp !h-auto py-2" {...register('notes')}/></Field></div>
  <div className="sm:col-span-2 flex justify-end gap-2 pt-2"><button type="button" className="btn-ghost" onClick={onClose}>Cancel</button><button type="submit" disabled={isSubmitting} className="btn-primary">{isSubmitting?'Saving…':customer?'Save Changes':'Add Customer'}</button></div></form></Modal>}

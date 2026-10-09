@@ -3,8 +3,8 @@ create extension if not exists pgcrypto;
 create table public.customers (
   id uuid primary key default gen_random_uuid(),
   name text not null default '' check (char_length(name) <= 120),
-  phone text not null default '' check (char_length(phone) <= 32),
-  email text not null default ''
+  phone text default '' check (char_length(phone) <= 32),
+  email text default ''
     check (
       char_length(email) <= 254
       and (email = '' or email ~* '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$')
@@ -63,12 +63,24 @@ create policy customers_public_registration
   to anon
   with check (
     status = 'New'
-    and char_length(btrim(name)) between 2 and 120
-    and char_length(btrim(phone)) between 1 and 32
-    and char_length(btrim(email)) between 3 and 254
-    and email ~* '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'
-    and birthday is not null
-    and birthday <= current_date
+    and char_length(btrim(name)) between 1 and 120
+    and (
+      phone is null
+      or btrim(phone) = ''
+      or (
+        char_length(btrim(phone)) <= 32
+        and btrim(phone) ~ '^(\+91[\s-]?)?[6-9][0-9]{4}[\s-]?[0-9]{5}$'
+      )
+    )
+    and (
+      email is null
+      or btrim(email) = ''
+      or (
+        char_length(btrim(email)) <= 254
+        and btrim(email) ~* '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'
+      )
+    )
+    and (birthday is null or birthday <= current_date)
     and (anniversary is null or anniversary <= current_date)
   );
 

@@ -33,8 +33,8 @@ const writeCache = customers => {
 const fromRow = row => ({
 	id: row.id,
 	name: row.name,
-	phone: row.phone,
-	email: row.email,
+	phone: row.phone || '',
+	email: row.email || '',
 	birthday: row.birthday || '',
 	anniversary: row.anniversary || '',
 	status: row.status,
@@ -46,8 +46,8 @@ const fromRow = row => ({
 
 const toRow = customer => ({
 	name: customer.name,
-	phone: customer.phone,
-	email: customer.email || '',
+	phone: customer.phone?.trim() || null,
+	email: customer.email?.trim() || null,
 	birthday: customer.birthday || null,
 	anniversary: customer.anniversary || null,
 	status: customer.status || 'New',

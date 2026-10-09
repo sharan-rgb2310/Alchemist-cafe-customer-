@@ -33,6 +33,13 @@ in the database.
    npx supabase db push
    ```
 
+   This includes `20261009120000_allow_name_only_customer_registration.sql`,
+   which updates the public registration policy and makes phone and email
+   nullable. Until it is applied to the same Supabase project configured in
+   `.env`, public registration may fail with a row-level security policy error.
+   The frontend will show a database-update message for that error; do not
+   bypass RLS or use a service-role key in the browser.
+
 Public registration only inserts new customers. Reading, editing, and deleting
 customer records require signing in as a user whose `app_metadata.role` is
 `admin`.
