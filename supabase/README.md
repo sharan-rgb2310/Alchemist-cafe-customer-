@@ -35,10 +35,12 @@ in the database.
 
    This includes `20261009120000_allow_name_only_customer_registration.sql`,
    which updates the public registration policy and makes phone and email
-   nullable. Until it is applied to the same Supabase project configured in
-   `.env`, public registration may fail with a row-level security policy error.
-   The frontend will show a database-update message for that error; do not
-   bypass RLS or use a service-role key in the browser.
+   nullable, and `20261009124500_allow_future_registration_dates.sql`, which
+   allows valid future dates of birth and anniversaries. Apply these migrations
+   to the same Supabase project configured in `.env` for public registration to
+   work as expected. The frontend will show a database-update message if a
+   registration is rejected by row-level security; do not bypass RLS or use a
+   service-role key in the browser.
 
 Public registration only inserts new customers. Reading, editing, and deleting
 customer records require signing in as a user whose `app_metadata.role` is

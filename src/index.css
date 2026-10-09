@@ -244,35 +244,31 @@ html.compact {
     gap: 14px
 }
 
-.registration-date-grid .registration-input {
-    padding-left: 36px
+.registration-date-text {
+    padding-left: 12px;
+    padding-right: 44px
 }
 
-.registration-date-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
+.registration-date-picker-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    width: 44px;
+    height: 100%;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #95887c;
     cursor: pointer;
     touch-action: manipulation
 }
 
-.registration-date-trigger[aria-invalid="true"] {
-    border-color: #a64242
-}
-
-.registration-date-trigger:focus-visible {
-    border-color: #a78156;
-    box-shadow: 0 0 0 3px rgba(167, 129, 86, .15)
-}
-
-.registration-date-placeholder {
-    color: #a39e96
-}
-
-.registration-date-picker-icon {
-    flex: 0 0 auto;
-    color: #95887c
+.registration-date-picker-button:focus-visible {
+    border-radius: 7px;
+    outline: 2px solid #a78156;
+    outline-offset: -3px
 }
 
 .registration-date-native {

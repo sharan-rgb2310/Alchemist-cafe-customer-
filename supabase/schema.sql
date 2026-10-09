@@ -80,8 +80,6 @@ create policy customers_public_registration
         and btrim(email) ~* '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'
       )
     )
-    and (birthday is null or birthday <= current_date)
-    and (anniversary is null or anniversary <= current_date)
   );
 
 create policy customers_admin_access
